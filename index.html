@@ -11,72 +11,81 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
 
   <style>
-    /* ══════════════════════════════════════════════════════
-       DESIGN TOKENS — Dark Mode (default)
-       Every colour that touches UI chrome uses a variable.
-       No raw #fff / #000 inside component rules.
-    ══════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════
+       DESIGN TOKENS — DARK MODE (default)
+       ─────────────────────────────────────────────────────
+       RULE: Every colour that reaches the UI chrome is a
+       CSS variable. Zero raw #fff / #000 inside component
+       rules — only inside :root / body.light declarations.
+    ════════════════════════════════════════════════════════ */
     :root {
-      /* Brand */
+      /* ── Brand ───────────────────────────────────────── */
       --maroon:           #7b1d2e;
       --maroon-b:         #a8293e;
       --gold:             #c9973a;
-      --gold-soft:        rgba(201,151,58,0.15);
-      --gold-ring:        rgba(201,151,58,0.38);
+      --gold-soft:        rgba(201,151,58,0.14);
+      --gold-ring:        rgba(201,151,58,0.42);
+      --blue-dot:         #1976d2;
 
-      /* Dark surfaces (WCAG-AA charcoal palette — Task 4) */
+      /* ── Dark surfaces (charcoal, Task 4) ───────────── */
       --bg:               #121212;
-      --surface:          #1a1f2e;
-      --surface-alt:      #232840;
-      --surface-raised:   #2a3050;
+      --surface:          #1c2030;
+      --surface-alt:      #242840;
+      --surface-raised:   #2e3454;
 
-      /* Dark borders / glass */
+      /* ── Dark borders / glass ────────────────────────── */
       --border:           rgba(255,255,255,0.09);
-      --glass:            rgba(18,18,18,0.86);
-      --header-bg:        rgba(18,18,18,0.94);
+      --glass:            rgba(18,18,18,0.88);
+      --header-bg:        rgba(15,15,22,0.94);
 
-      /* Dark typography (Task 4: soft-white, not pure #fff) */
+      /* ── Dark typography (Task 4: soft-white #e0e0e0) ── */
       --text-primary:     #e0e0e0;
-      --text-secondary:   #9ba3b8;
-      --text-on-brand:    #ffffff;   /* always white on coloured surfaces */
-      --text-placeholder: rgba(224,224,224,0.38);
+      --text-secondary:   #9aa3bc;
+      --text-on-brand:    #ffffff;     /* always white on colour surfaces   */
+      --text-placeholder: rgba(224,224,224,0.36);
 
-      /* Icon / control surfaces */
-      --ctrl-bg:          rgba(26,31,46,0.92);
+      /* ── Icon / control tokens ───────────────────────── */
+      --ctrl-bg:          rgba(28,32,48,0.92);
       --ctrl-border:      rgba(255,255,255,0.10);
-      --ctrl-icon:        #e0e0e0;
+      --ctrl-icon:        #e0e0e0;     /* dark mode: light icon on dark bg  */
 
-      /* Search dropdown */
-      --dropdown-bg:      #1a1f2e;
+      /* ── Search dropdown ─────────────────────────────── */
+      --dropdown-bg:      #1c2030;
       --dropdown-hover:   rgba(255,255,255,0.06);
       --dropdown-div:     rgba(255,255,255,0.05);
 
-      /* Legend */
+      /* ── Legend ──────────────────────────────────────── */
       --legend-text:      #c4cad8;
 
-      /* Panel */
-      --panel-bg:         #1a1f2e;
-      --panel-tab-active: #2a3050;
-      --panel-tab-text:   #9ba3b8;
+      /* ── Panel ───────────────────────────────────────── */
+      --panel-bg:         #1c2030;
+      --panel-tab-active: #2e3454;
+      --panel-tab-text:   #9aa3bc;
       --panel-tab-active-text: #e0e0e0;
-      --chip-bg:          #232840;
+      --chip-bg:          #242840;
       --chip-border:      rgba(255,255,255,0.07);
 
-      /* Student card */
+      /* ── Student card ────────────────────────────────── */
       --card-bg:          rgba(201,151,58,0.10);
       --card-border:      rgba(201,151,58,0.22);
 
-      /* Toast */
-      --toast-bg:         #2a3050;
+      /* ── Toast ───────────────────────────────────────── */
+      --toast-bg:         #2e3454;
+      --toast-text:       #e0e0e0;
       --toast-border:     rgba(255,255,255,0.10);
 
-      /* Scrollbar */
+      /* ── Error banner ────────────────────────────────── */
+      --err-bg:           #2a1818;
+      --err-border:       rgba(168,41,62,0.45);
+      --err-text:         #f4a0a0;
+
+      /* ── Scrollbar ───────────────────────────────────── */
       --scroll-thumb:     rgba(255,255,255,0.14);
 
-      /* Map */
+      /* ── Map ─────────────────────────────────────────── */
       --map-filter:       saturate(0.72) brightness(0.82);
 
-      /* Misc */
+      /* ── Shared misc ─────────────────────────────────── */
       --radius:     14px;
       --radius-lg:  20px;
       --shadow:     0 8px 28px rgba(0,0,0,0.40);
@@ -84,23 +93,23 @@
       --ease:       cubic-bezier(0.4,0,0.2,1);
     }
 
-    /* ══════════════════════════════════════════════════════
-       LIGHT MODE — every token flips, no hardcodes in components
-    ══════════════════════════════════════════════════════ */
+    /* ════════════════════════════════════════════════════════
+       LIGHT MODE — every token flips, no hardcodes in rules
+    ════════════════════════════════════════════════════════ */
     body.light {
-      --bg:               #eef1f8;
+      --bg:               #edf0f8;
       --surface:          #ffffff;
-      --surface-alt:      #eef1f8;
-      --surface-raised:   #e0e6f5;
+      --surface-alt:      #edf0f8;
+      --surface-raised:   #dde3f4;
       --border:           rgba(13,27,62,0.11);
-      --glass:            rgba(240,244,255,0.93);
-      --header-bg:        rgba(13,27,62,0.96);  /* navy stays dark */
+      --glass:            rgba(237,240,248,0.94);
+      --header-bg:        rgba(11,20,50,0.97);    /* navy header stays dark  */
       --text-primary:     #0d1b3e;
       --text-secondary:   #4a5580;
-      --text-placeholder: rgba(13,27,62,0.35);
-      --ctrl-bg:          rgba(255,255,255,0.93);
-      --ctrl-border:      rgba(13,27,62,0.13);
-      --ctrl-icon:        #0d1b3e;              /* dark icons on white */
+      --text-placeholder: rgba(13,27,62,0.34);
+      --ctrl-bg:          rgba(255,255,255,0.95);
+      --ctrl-border:      rgba(13,27,62,0.14);
+      --ctrl-icon:        #0d1b3e;                /* light mode: dark icon   */
       --dropdown-bg:      #ffffff;
       --dropdown-hover:   rgba(13,27,62,0.05);
       --dropdown-div:     rgba(13,27,62,0.06);
@@ -109,17 +118,23 @@
       --panel-tab-active: #0d1b3e;
       --panel-tab-text:   #4a5580;
       --panel-tab-active-text: #ffffff;
-      --chip-bg:          #eef1f8;
-      --chip-border:      rgba(13,27,62,0.10);
-      --card-bg:          rgba(201,151,58,0.08);
-      --card-border:      rgba(201,151,58,0.20);
+      --chip-bg:          #edf0f8;
+      --chip-border:      rgba(13,27,62,0.09);
+      --card-bg:          rgba(201,151,58,0.07);
+      --card-border:      rgba(201,151,58,0.18);
       --toast-bg:         #0d1b3e;
-      --toast-border:     rgba(255,255,255,0.15);
-      --scroll-thumb:     rgba(13,27,62,0.15);
+      --toast-text:       #ffffff;
+      --toast-border:     rgba(255,255,255,0.14);
+      --err-bg:           #fff0f0;
+      --err-border:       rgba(168,41,62,0.26);
+      --err-text:         #7b1d2e;
+      --scroll-thumb:     rgba(13,27,62,0.14);
       --map-filter:       saturate(1) brightness(1);
     }
 
-    /* ── BASE ─────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       BASE
+    ════════════════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
       height: 100%; overflow: hidden;
@@ -128,71 +143,88 @@
       color: var(--text-primary);
     }
 
-    /* ── MAP ─────────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       MAP
+    ════════════════════════════════════════════════════════ */
     #map {
       position: absolute; inset: 0; z-index: 0;
       filter: var(--map-filter);
       transition: filter 0.45s var(--ease);
     }
 
-    /* ── HEADER ──────────────────────────────────────── */
-    #header { position: absolute; top: 0; left: 0; right: 0; z-index: 900; padding: 14px 14px 0; }
+    /* ════════════════════════════════════════════════════════
+       HEADER
+    ════════════════════════════════════════════════════════ */
+    #header {
+      position: absolute; top: 0; left: 0; right: 0;
+      z-index: 900; padding: 14px 14px 0;
+    }
     .header-row { display: flex; align-items: center; gap: 10px; }
 
+    /* Logo pill — always maroon, text always white */
     .logo {
       display: flex; align-items: center; gap: 9px;
       background: var(--maroon); color: var(--text-on-brand);
       padding: 9px 15px; border-radius: 50px;
-      flex-shrink: 0; box-shadow: var(--shadow); text-decoration: none; user-select: none;
+      flex-shrink: 0; box-shadow: var(--shadow);
+      text-decoration: none; user-select: none;
     }
     .logo-mark { font-size: 18px; line-height: 1; }
     .logo-text { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; line-height: 1; }
     .logo-sub  { font-size: 9px; font-weight: 300; opacity: 0.65; letter-spacing: 0.09em; text-transform: uppercase; }
 
+    /* Search */
     .search-wrap { flex: 1; position: relative; }
     #search-input {
       width: 100%;
       background: var(--header-bg);
       backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-      border: 1.5px solid var(--ctrl-border);
-      color: var(--text-on-brand);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      color: var(--text-on-brand);           /* always white — on dark header */
       font-family: 'DM Sans', sans-serif; font-size: 14px;
-      padding: 11px 44px 11px 18px; border-radius: 50px; outline: none;
+      padding: 11px 44px 11px 18px;
+      border-radius: 50px; outline: none;
       box-shadow: var(--shadow); transition: border-color 0.3s;
     }
-    #search-input::placeholder { color: var(--text-placeholder); opacity: 1; }
+    #search-input::placeholder { color: rgba(255,255,255,0.38); opacity: 1; }
     #search-input:focus { border-color: var(--gold-ring); }
     .search-icon {
       position: absolute; right: 14px; top: 50%;
       transform: translateY(-50%); pointer-events: none;
-      color: var(--text-secondary);
+      color: rgba(255,255,255,0.45);
     }
     .search-icon svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
+    /* Header action buttons — always on dark header bg */
     .hdr-btns { display: flex; gap: 8px; flex-shrink: 0; }
     .hdr-btn {
       height: 40px; padding: 0 13px; border-radius: 50px;
-      border: 1.5px solid var(--ctrl-border); background: var(--header-bg);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: var(--header-bg);
       backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       color: var(--text-on-brand);
       font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600;
       cursor: pointer; display: flex; align-items: center; gap: 6px;
-      box-shadow: var(--shadow); transition: background 0.2s, border-color 0.2s; white-space: nowrap;
+      box-shadow: var(--shadow); transition: background 0.2s, border-color 0.2s;
+      white-space: nowrap;
     }
-    .hdr-btn:hover { background: rgba(30,49,104,0.96); border-color: rgba(255,255,255,0.22); }
+    .hdr-btn:hover { background: rgba(30,49,104,0.98); border-color: rgba(255,255,255,0.22); }
     .hdr-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     #lang-btn { min-width: 58px; justify-content: center; }
     #theme-btn { padding: 0 11px; }
 
-    /* ── SEARCH DROPDOWN ─────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       SEARCH DROPDOWN
+    ════════════════════════════════════════════════════════ */
     #search-results {
       position: absolute; top: calc(100% + 8px); left: 0; right: 0;
-      background: var(--dropdown-bg); border: 1.5px solid var(--border);
-      border-radius: var(--radius); overflow: hidden;
-      box-shadow: var(--shadow-lg); display: none; z-index: 999;
-      max-height: 280px; overflow-y: auto;
+      background: var(--dropdown-bg);
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; box-shadow: var(--shadow-lg);
+      display: none; z-index: 999; max-height: 280px; overflow-y: auto;
     }
     #search-results.open { display: block; }
+
     .sr-item {
       display: flex; align-items: center; gap: 12px;
       padding: 11px 16px; cursor: pointer; transition: background 0.15s;
@@ -203,12 +235,18 @@
     .sr-icon { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; font-size: 17px; flex-shrink: 0; }
     .sr-name { font-size: 13px; font-weight: 600; color: var(--text-primary); line-height: 1.3; }
     .sr-meta { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
-    .sr-score { margin-left: auto; font-size: 10px; font-weight: 700; background: var(--gold-soft); color: var(--gold); padding: 2px 8px; border-radius: 50px; flex-shrink: 0; }
+    .sr-score {
+      margin-left: auto; font-size: 10px; font-weight: 700;
+      background: var(--gold-soft); color: var(--gold);
+      padding: 2px 8px; border-radius: 50px; flex-shrink: 0;
+    }
     .sr-empty { padding: 18px 16px; font-size: 13px; color: var(--text-secondary); text-align: center; }
 
-    /* ── LEGEND ──────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       LEGEND
+    ════════════════════════════════════════════════════════ */
     #legend {
-      position: absolute; left: 14px; bottom: 216px; z-index: 900;
+      position: absolute; left: 14px; bottom: 220px; z-index: 900;
       background: var(--glass);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
       border: 1.5px solid var(--border); border-radius: var(--radius);
@@ -219,10 +257,13 @@
     .legend-item:last-child { margin-bottom: 0; }
     .legend-dot   { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 
-    /* ── FLOAT CONTROLS ──────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       FLOATING CONTROLS
+       — uses CSS variables so icons flip in light mode (Task 1)
+    ════════════════════════════════════════════════════════ */
     #controls {
-      position: absolute; right: 14px; bottom: 216px; z-index: 900;
-      display: flex; flex-direction: column; gap: 9px;
+      position: absolute; right: 14px; bottom: 220px;
+      z-index: 900; display: flex; flex-direction: column; gap: 9px;
     }
     .ctrl-btn {
       width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer;
@@ -230,27 +271,34 @@
       box-shadow: var(--shadow); transition: transform 0.18s, box-shadow 0.18s;
     }
     .ctrl-btn:active { transform: scale(0.9); }
-    .ctrl-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ctrl-btn svg {
+      width: 20px; height: 20px; fill: none;
+      stroke: currentColor;         /* inherits --ctrl-icon via color */
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
 
-    /* Zoom + Centre — surfaces from variables so they flip in light mode */
+    /* Zoom + Centre: surface from variables → flips in light mode */
     #btn-zi, #btn-zo, #btn-center {
       background: var(--ctrl-bg);
       border: 1.5px solid var(--ctrl-border);
-      color: var(--ctrl-icon);
+      color: var(--ctrl-icon);      /* Task 1: dark in light mode, light in dark */
       backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
     }
     #btn-zi:hover, #btn-zo:hover, #btn-center:hover { background: var(--surface-raised); }
 
-    /* Locate — gold normally, blue when tracking is active */
+    /* Locate — gold normally, blue while tracking */
     #btn-locate { background: var(--gold); color: var(--bg); }
     #btn-locate:hover { box-shadow: 0 6px 24px rgba(201,151,58,0.60); }
-    #btn-locate.active { background: #1976d2; color: #ffffff; box-shadow: 0 6px 24px rgba(25,118,210,0.55); }
+    #btn-locate.tracking { background: var(--blue-dot); color: #ffffff; box-shadow: 0 6px 24px rgba(25,118,210,0.55); }
+    #btn-locate.tracking svg { stroke: #ffffff; }
 
-    /* ── BLUE PULSE DOT ──────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       BLUE PULSE DOT (Task 2)
+    ════════════════════════════════════════════════════════ */
     @keyframes pulse-ring {
-      0%   { transform: scale(1);   opacity: 0.7; }
-      70%  { transform: scale(2.5); opacity: 0; }
-      100% { transform: scale(2.5); opacity: 0; }
+      0%   { transform: scale(1);   opacity: 0.75; }
+      70%  { transform: scale(2.8); opacity: 0; }
+      100% { transform: scale(2.8); opacity: 0; }
     }
     .blue-dot-wrap {
       position: relative; width: 20px; height: 20px;
@@ -258,16 +306,20 @@
     }
     .blue-dot-pulse {
       position: absolute; width: 20px; height: 20px; border-radius: 50%;
-      background: rgba(25,118,210,0.42);
-      animation: pulse-ring 2s ease-out infinite;
+      background: rgba(25,118,210,0.40);
+      animation: pulse-ring 2.2s ease-out infinite;
     }
     .blue-dot-core {
-      position: relative; width: 14px; height: 14px; border-radius: 50%;
-      background: #1976d2; border: 2.5px solid #ffffff;
-      box-shadow: 0 2px 10px rgba(25,118,210,0.65); z-index: 1;
+      position: relative; z-index: 1;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #1976d2;
+      border: 2.5px solid #ffffff;
+      box-shadow: 0 2px 10px rgba(25,118,210,0.65);
     }
 
-    /* ── PANEL ───────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       PANEL (bottom sheet mobile / sidebar desktop)
+    ════════════════════════════════════════════════════════ */
     #panel {
       position: absolute; left: 0; right: 0; bottom: 0;
       z-index: 950; max-height: 84vh;
@@ -283,27 +335,33 @@
       box-shadow: 0 -16px 60px rgba(0,0,0,0.50);
       display: flex; flex-direction: column; overflow: hidden; flex: 1;
     }
+    body.light .panel-inner { box-shadow: 0 -6px 30px rgba(13,27,62,0.14); }
+
     .panel-handle-row { display: flex; justify-content: center; padding: 12px 0 6px; flex-shrink: 0; }
     .panel-handle { width: 38px; height: 4px; border-radius: 2px; background: var(--border); }
 
+    /* Hero band */
     .panel-hero { height: 104px; position: relative; overflow: hidden; flex-shrink: 0; }
     .panel-hero-bg { position: absolute; inset: 0; }
     .panel-hero-pattern {
       position: absolute; inset: 0;
-      background-image: radial-gradient(circle,rgba(255,255,255,0.045) 1px,transparent 1px);
+      background-image: radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1px);
       background-size: 22px 22px;
     }
-    .panel-hero-content { position: absolute; inset: 0; padding: 14px 18px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .panel-hero-content {
+      position: absolute; inset: 0; padding: 14px 18px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
     .panel-badge {
       display: inline-flex; align-items: center; gap: 5px;
       padding: 3px 10px; border-radius: 50px;
-      font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
-      text-transform: uppercase; margin-bottom: 6px; width: fit-content;
-      color: var(--text-on-brand);
+      font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+      margin-bottom: 6px; width: fit-content; color: var(--text-on-brand);
     }
-    .panel-name   { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; color: var(--text-on-brand); line-height: 1.1; }
-    .panel-common { font-size: 12px; color: rgba(255,255,255,0.58); margin-top: 3px; }
+    .panel-name   { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text-on-brand); line-height: 1.1; }
+    .panel-common { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 3px; }
 
+    /* Close — always on coloured hero, so always white */
     .panel-close {
       position: absolute; top: 12px; right: 14px;
       width: 30px; height: 30px; border-radius: 50%; border: none;
@@ -311,14 +369,16 @@
       cursor: pointer; display: grid; place-items: center; z-index: 5;
       transition: background 0.18s;
     }
-    .panel-close:hover { background: rgba(0,0,0,0.45); }
+    .panel-close:hover { background: rgba(0,0,0,0.48); }
     .panel-close svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
 
+    /* Scrollable body */
     .panel-body { overflow-y: auto; flex: 1; padding: 16px 18px 28px; -webkit-overflow-scrolling: touch; }
     .panel-body::-webkit-scrollbar { width: 4px; }
     .panel-body::-webkit-scrollbar-track { background: transparent; }
     .panel-body::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 2px; }
 
+    /* Tabs */
     .panel-tabs { display: flex; gap: 4px; margin-bottom: 16px; background: var(--surface-alt); padding: 4px; border-radius: 10px; }
     .tab-btn {
       flex: 1; padding: 8px; border: none; cursor: pointer; border-radius: 7px;
@@ -330,20 +390,28 @@
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
 
+    /* Info content */
     .info-section { margin-bottom: 16px; }
     .info-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 6px; }
     .info-text  { font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; }
 
+    /* Student tip card */
     .student-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
-    .student-card-header { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+    .student-card-header {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 700; color: var(--gold);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;
+    }
     .student-card-header svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
     .student-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
 
+    /* Fact chips */
     .quick-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
     .fact-chip { background: var(--chip-bg); border: 1px solid var(--chip-border); border-radius: 10px; padding: 10px 12px; }
     .fact-chip-label { font-size: 10px; color: var(--text-secondary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; }
     .fact-chip-value { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-top: 3px; }
 
+    /* Action buttons */
     .panel-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .action-btn {
       display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -356,76 +424,100 @@
     .action-primary   { background: var(--maroon-b); color: var(--text-on-brand); }
     .action-secondary { background: var(--surface-alt); border: 1.5px solid var(--border); color: var(--text-secondary); }
 
-    /* ── DESKTOP SIDEBAR ─────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       DESKTOP SIDEBAR
+    ════════════════════════════════════════════════════════ */
     @media (min-width: 640px) {
       #panel {
         left: 16px; right: auto; bottom: 16px; top: 78px;
         width: 360px; max-height: calc(100vh - 94px);
-        transform: translateX(-115%); transition: transform 0.38s var(--ease);
+        transform: translateX(-115%);
+        transition: transform 0.38s var(--ease);
       }
       #panel.open { transform: translateX(0); }
       .panel-inner { border-radius: var(--radius-lg); }
       .panel-handle-row { display: none; }
     }
 
-    /* ── LOCATION ERROR BANNER ───────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       LOCATION ERROR BANNER (Task 3)
+    ════════════════════════════════════════════════════════ */
     #loc-error {
       position: absolute; bottom: 210px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
+      transform: translateX(-50%) translateY(24px);
       z-index: 960; max-width: 320px; width: calc(100% - 40px);
-      background: #2d1515;
-      border: 1.5px solid rgba(168,41,62,0.45);
-      color: #f4a0a0;
+      background: var(--err-bg);
+      border: 1.5px solid var(--err-border);
+      color: var(--err-text);
       padding: 14px 18px; border-radius: var(--radius);
-      font-size: 13px; line-height: 1.55;
+      font-size: 13px; line-height: 1.58;
       box-shadow: var(--shadow-lg);
       opacity: 0; pointer-events: none;
-      transition: opacity 0.32s, transform 0.32s; text-align: center;
+      transition: opacity 0.32s, transform 0.32s;
+      text-align: center;
     }
     #loc-error.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: all; }
-    body.light #loc-error { background: #fff0f0; border-color: rgba(168,41,62,0.28); color: #7b1d2e; }
     #loc-error-close {
       display: inline-block; margin-top: 9px;
       font-size: 11px; font-weight: 700; cursor: pointer;
       color: var(--gold); text-transform: uppercase; letter-spacing: 0.07em;
     }
 
-    /* ── TOAST ───────────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       TOAST
+    ════════════════════════════════════════════════════════ */
     #toast {
       position: absolute; bottom: 210px; left: 50%;
       transform: translateX(-50%) translateY(16px);
-      z-index: 961; background: var(--toast-bg);
-      color: var(--text-primary); padding: 10px 20px;
-      border-radius: 50px; font-size: 13px; font-weight: 500;
+      z-index: 961;
+      background: var(--toast-bg); color: var(--toast-text);
+      padding: 10px 20px; border-radius: 50px;
+      font-size: 13px; font-weight: 500;
       border: 1px solid var(--toast-border);
       box-shadow: var(--shadow); opacity: 0; pointer-events: none; white-space: nowrap;
       transition: opacity 0.28s, transform 0.28s;
     }
     #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ── BUK MARKERS ─────────────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       BUK LANDMARK MARKERS
+    ════════════════════════════════════════════════════════ */
     .buk-marker {
       width: 36px; height: 36px; border-radius: 50% 50% 50% 0;
       transform: rotate(-45deg); display: grid; place-items: center;
       box-shadow: 0 4px 14px rgba(0,0,0,0.45);
       border: 2.5px solid rgba(255,255,255,0.88); cursor: pointer;
+      transition: transform 0.18s;
     }
     .buk-marker .mi { transform: rotate(45deg); font-size: 15px; line-height: 1; }
     .buk-marker.active { border-color: var(--gold); transform: rotate(-45deg) scale(1.22); }
 
-    /* ── LEAFLET OVERRIDES ───────────────────────────── */
+    /* ════════════════════════════════════════════════════════
+       LEAFLET OVERRIDES (Task 1)
+       — attribution uses CSS vars; zoom control hidden
+    ════════════════════════════════════════════════════════ */
     .leaflet-control-zoom { display: none !important; }
-    .leaflet-control-attribution { background: var(--glass) !important; color: var(--text-secondary) !important; font-size: 10px !important; }
+    .leaflet-control-attribution {
+      background: var(--glass) !important;
+      color: var(--text-secondary) !important;
+      font-size: 10px !important;
+    }
     .leaflet-control-attribution a { color: var(--text-secondary) !important; }
   </style>
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════════════════
+     MAP CANVAS
+══════════════════════════════════════════════════════ -->
 <div id="map"></div>
 
-<!-- ── HEADER ───────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════
+     HEADER
+══════════════════════════════════════════════════════ -->
 <div id="header">
   <div class="header-row">
+
     <div class="logo">
       <span class="logo-mark">🗺</span>
       <div>
@@ -433,26 +525,35 @@
         <div class="logo-sub" data-i18n="oldSite">Old Site</div>
       </div>
     </div>
+
     <div class="search-wrap">
-      <input type="text" id="search-input" autocomplete="off" />
+      <input type="text" id="search-input" autocomplete="off" spellcheck="false" />
       <div class="search-icon">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
       <div id="search-results"></div>
     </div>
+
     <div class="hdr-btns">
-      <button class="hdr-btn" id="lang-btn">
+      <!-- Language toggle -->
+      <button class="hdr-btn" id="lang-btn" aria-label="Toggle language">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         <span id="lang-label">HA</span>
       </button>
-      <button class="hdr-btn" id="theme-btn">
-        <svg id="theme-icon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <!-- Theme toggle -->
+      <button class="hdr-btn" id="theme-btn" aria-label="Toggle theme">
+        <svg id="theme-icon" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
       </button>
     </div>
+
   </div>
 </div>
 
-<!-- ── LEGEND ────────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════
+     LEGEND
+══════════════════════════════════════════════════════ -->
 <div id="legend">
   <div class="legend-title" data-i18n="categories">Categories</div>
   <div class="legend-item"><div class="legend-dot" style="background:#c9973a"></div><span data-i18n="catFaculty">Faculty</span></div>
@@ -461,27 +562,47 @@
   <div class="legend-item"><div class="legend-dot" style="background:#388e3c"></div><span data-i18n="catOffice">Office</span></div>
 </div>
 
-<!-- ── FLOAT CONTROLS ────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════
+     FLOATING CONTROLS
+     Each non-gold button uses --ctrl-bg / --ctrl-icon
+     so icons are visible in BOTH modes (Task 1).
+══════════════════════════════════════════════════════ -->
 <div id="controls">
-  <button class="ctrl-btn" id="btn-zi">
+  <button class="ctrl-btn" id="btn-zi" aria-label="Zoom in">
     <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
-  <button class="ctrl-btn" id="btn-zo">
+  <button class="ctrl-btn" id="btn-zo" aria-label="Zoom out">
     <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
-  <button class="ctrl-btn" id="btn-center" title="Centre on BUK">
-    <!-- crosshair / home icon -->
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="1" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="23" y2="12"/><circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/></svg>
+  <!-- Centre Map — Task 3 -->
+  <button class="ctrl-btn" id="btn-center" aria-label="Centre on BUK">
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9"/>
+      <line x1="12" y1="1"  x2="12" y2="5"/>
+      <line x1="12" y1="19" x2="12" y2="23"/>
+      <line x1="1"  y1="12" x2="5"  y2="12"/>
+      <line x1="19" y1="12" x2="23" y2="12"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor" stroke="none"/>
+    </svg>
   </button>
-  <button class="ctrl-btn" id="btn-locate">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="8" stroke-dasharray="3 2"/></svg>
+  <!-- Locate Me / Live Tracking — Task 2 -->
+  <button class="ctrl-btn" id="btn-locate" aria-label="Locate me">
+    <svg viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+      <circle cx="12" cy="12" r="8" stroke-dasharray="3 2"/>
+    </svg>
   </button>
 </div>
 
-<!-- ── PANEL ─────────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════
+     BUILDING PANEL
+══════════════════════════════════════════════════════ -->
 <div id="panel">
   <div class="panel-inner">
     <div class="panel-handle-row"><div class="panel-handle"></div></div>
+
+    <!-- Hero colour band -->
     <div class="panel-hero">
       <div class="panel-hero-bg" id="panel-hero-bg"></div>
       <div class="panel-hero-pattern"></div>
@@ -490,24 +611,27 @@
         <div class="panel-name"   id="panel-name"></div>
         <div class="panel-common" id="panel-common"></div>
       </div>
-      <button class="panel-close" id="panel-close">
+      <button class="panel-close" id="panel-close" aria-label="Close">
         <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
+
     <div class="panel-body">
+      <!-- Tabs -->
       <div class="panel-tabs">
         <button class="tab-btn active" data-tab="info"  data-i18n="tabInfo">About</button>
         <button class="tab-btn"        data-tab="tips"  data-i18n="tabTips">Student Tips</button>
         <button class="tab-btn"        data-tab="facts" data-i18n="tabFacts">Quick Facts</button>
       </div>
 
+      <!-- About -->
       <div class="tab-panel active" id="tab-info">
         <div class="info-section">
           <div class="info-label" data-i18n="labelDesc">Description</div>
           <div class="info-text" id="panel-desc"></div>
         </div>
         <div class="panel-actions">
-          <button class="action-btn action-primary" id="btn-navigate">
+          <button class="action-btn action-primary"   id="btn-navigate">
             <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             <span data-i18n="navigate">Navigate</span>
           </button>
@@ -518,6 +642,7 @@
         </div>
       </div>
 
+      <!-- Tips -->
       <div class="tab-panel" id="tab-tips">
         <div class="student-card">
           <div class="student-card-header">
@@ -527,7 +652,7 @@
           <p id="panel-students"></p>
         </div>
         <div class="panel-actions">
-          <button class="action-btn action-primary" id="btn-navigate2">
+          <button class="action-btn action-primary"   id="btn-navigate2">
             <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             <span data-i18n="navigate">Navigate</span>
           </button>
@@ -538,10 +663,11 @@
         </div>
       </div>
 
+      <!-- Facts -->
       <div class="tab-panel" id="tab-facts">
         <div class="quick-facts" id="panel-facts"></div>
         <div class="panel-actions" style="margin-top:4px">
-          <button class="action-btn action-primary" id="btn-navigate3">
+          <button class="action-btn action-primary"   id="btn-navigate3">
             <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
             <span data-i18n="navigate">Navigate</span>
           </button>
@@ -555,61 +681,94 @@
   </div>
 </div>
 
-<!-- ── LOCATION ERROR BANNER ───────────────────────── -->
-<div id="loc-error">
+<!-- ══════════════════════════════════════════════════════
+     LOCATION ERROR BANNER (Task 3)
+══════════════════════════════════════════════════════ -->
+<div id="loc-error" role="alert">
   <div id="loc-error-msg"></div>
-  <div id="loc-error-close" data-i18n="dismiss">Dismiss</div>
+  <div id="loc-error-close" role="button" tabindex="0" data-i18n="dismiss">Dismiss</div>
 </div>
 
-<!-- ── TOAST ─────────────────────────────────────────── -->
-<div id="toast"></div>
+<!-- Toast -->
+<div id="toast" role="status" aria-live="polite"></div>
 
+<!-- ══════════════════════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════════════════════ -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/7.0.0/fuse.min.js"></script>
 <script>
-/* ══════════════════════════════════════════════════════
-   i18n
-══════════════════════════════════════════════════════ */
+'use strict';
+
+/* ════════════════════════════════════════════════════════
+   i18n — TRANSLATIONS
+   Covers all UI strings + bilingual error messages (Task 3)
+════════════════════════════════════════════════════════ */
 const translations = {
   en: {
-    oldSite:"Old Site", searchPlaceholder:"Search buildings, faculties…",
-    categories:"Categories", catFaculty:"Faculty", catTheater:"Theater",
-    catLibrary:"Library", catOffice:"Office",
-    tabInfo:"About", tabTips:"Student Tips", tabFacts:"Quick Facts",
-    labelDesc:"Description", navigate:"Navigate", share:"Share", save:"Save",
-    studentTip:"Student Tip",
-    locating:"Locating you…",
-    locationFound:"Blue dot placed — you are here!",
-    locationUpdated:"Position updated.",
-    trackingOn:"Live tracking active.", trackingOff:"Live tracking stopped.",
-    centerDone:"Centred on BUK Old Site.",
-    navSoon:"GPS routing coming in v4!",
-    shareDone:"Link copied!", saveDone:"Location saved!",
-    dismiss:"Dismiss", noResults:"No results found",
-    errDenied:"Location access denied. Please allow location permissions in your browser settings to use this feature.",
-    errUnavailable:"Location unavailable. Make sure GPS is enabled on your device.",
-    errTimeout:"Location request timed out. Please try again.",
-    errUnsupported:"Your browser does not support geolocation.",
+    oldSite:         "Old Site",
+    searchPlaceholder: "Search buildings, faculties…",
+    categories:      "Categories",
+    catFaculty:      "Faculty",
+    catTheater:      "Theater",
+    catLibrary:      "Library",
+    catOffice:       "Office",
+    tabInfo:         "About",
+    tabTips:         "Student Tips",
+    tabFacts:        "Quick Facts",
+    labelDesc:       "Description",
+    navigate:        "Navigate",
+    share:           "Share",
+    save:            "Save",
+    studentTip:      "Student Tip",
+    locating:        "Searching for your location…",
+    locationFound:   "📍 Blue dot placed — you are here!",
+    locationUpdated: "Position updated.",
+    trackingOn:      "Live tracking is active.",
+    trackingOff:     "Live tracking stopped.",
+    centerDone:      "Centred on BUK Old Site.",
+    navSoon:         "GPS routing coming in v4!",
+    shareDone:       "Link copied to clipboard!",
+    saveDone:        "Location bookmarked!",
+    dismiss:         "Dismiss",
+    noResults:       "No buildings found. Try a different spelling.",
+    // Geolocation errors — Task 3
+    errDenied:       "Location access was denied. Please enable location permissions in your browser settings to use this feature.",
+    errUnavailable:  "Your location is currently unavailable. Make sure GPS is enabled on your device.",
+    errTimeout:      "Location request timed out. Please try again.",
+    errUnsupported:  "Your browser does not support geolocation. Try updating your browser.",
   },
   ha: {
-    oldSite:"Tsohon Wurin", searchPlaceholder:"Nemo gini, azuzuwan…",
-    categories:"Nau'ikan", catFaculty:"Azuzuwan", catTheater:"Filin Taro",
-    catLibrary:"Dakin Karatu", catOffice:"Ofis",
-    tabInfo:"Bayani", tabTips:"Nasihar Dalibi", tabFacts:"Bayanai Gabaɗaya",
-    labelDesc:"Bayanin Wuri", navigate:"Bi Hanya", share:"Raba", save:"Ajiye",
-    studentTip:"Nasihar Dalibi",
-    locating:"Ana nemo wurinka…",
-    locationFound:"An nemo wuri — kana nan!",
-    locationUpdated:"An sabunta matsayinka.",
-    trackingOn:"Ana bin sawun wuri.", trackingOff:"An dakatar da bin wuri.",
-    centerDone:"An dawo tsakiyar BUK.",
-    navSoon:"Jagoran GPS zai zo a v4!",
-    shareDone:"An kwafi hanyar!", saveDone:"An ajiye wuri!",
-    dismiss:"Rufe", noResults:"Ba a sami sakamako ba",
-    errDenied:"An hana damar wuri. Don Allah ka yarda da dama a saitunan browser ɗinka don amfani da wannan fasalin.",
-    errUnavailable:"Ba a sami wuri ba. Tabbatar GPS yana aiki a na'urarka.",
-    errTimeout:"Buƙatar wuri ta ɗauki lokaci mai yawa. Don Allah sake gwadawa.",
-    errUnsupported:"Browser ɗinka baya goyan bayan geolocation.",
+    oldSite:         "Tsohon Wurin",
+    searchPlaceholder: "Nemo gini, azuzuwan…",
+    categories:      "Nau'ikan",
+    catFaculty:      "Azuzuwan",
+    catTheater:      "Filin Taro",
+    catLibrary:      "Dakin Karatu",
+    catOffice:       "Ofis",
+    tabInfo:         "Bayani",
+    tabTips:         "Nasihar Dalibi",
+    tabFacts:        "Bayanai Gabaɗaya",
+    labelDesc:       "Bayanin Wuri",
+    navigate:        "Bi Hanya",
+    share:           "Raba",
+    save:            "Ajiye",
+    studentTip:      "Nasihar Dalibi",
+    locating:        "Ana nemo wurinka…",
+    locationFound:   "📍 An nemo wuri — kana nan!",
+    locationUpdated: "An sabunta matsayinka.",
+    trackingOn:      "Ana bin sawun wuri.",
+    trackingOff:     "An dakatar da bin wuri.",
+    centerDone:      "An dawo tsakiyar BUK.",
+    navSoon:         "Jagoran GPS zai zo a v4!",
+    shareDone:       "An kwafi hanyar!",
+    saveDone:        "An ajiye wuri!",
+    dismiss:         "Rufe",
+    noResults:       "Ba a sami gini ba. Gwada rubutu daban.",
+    errDenied:       "An hana damar wuri. Don Allah ka yarda da dama a saitunan browser ɗinka don amfani da wannan fasalin.",
+    errUnavailable:  "Ba a sami wurinka yanzu ba. Tabbatar GPS yana aiki a na'urarka.",
+    errTimeout:      "Buƙatar wuri ta ɗauki lokaci mai yawa. Don Allah sake gwadawa.",
+    errUnsupported:  "Browser ɗinka baya goyan bayan geolocation. Gwada sabuntawa.",
   }
 };
 
@@ -617,24 +776,27 @@ let currentLang = 'en';
 const t = k => translations[currentLang][k] ?? translations.en[k] ?? k;
 
 function applyTranslations() {
-  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
   document.getElementById('search-input').placeholder = t('searchPlaceholder');
   document.getElementById('lang-label').textContent   = currentLang === 'en' ? 'HA' : 'EN';
 }
 
-/* ══════════════════════════════════════════════════════
-   LANDMARKS
-══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   LANDMARKS DATA
+════════════════════════════════════════════════════════ */
 const bukLandmarks = [
   {
     id:'fais', category:'Faculty', emoji:'📚', color:'#c9973a',
     heroBg:'linear-gradient(135deg,#7a5a1a,#1e3168)',
-    name_en:"Faculty of Arts & Islamic Studies", name_ha:"Fakaltun Fasaha da Karatun Musulunci",
+    name_en:"Faculty of Arts & Islamic Studies",
+    name_ha:"Fakaltun Fasaha da Karatun Musulunci",
     commonName_en:"FAIS Building", commonName_ha:"Ginin FAIS",
     desc_en:"Home to the departments of Arabic, Islamic Studies, History, and English Language. One of BUK's oldest and most distinguished faculties, recognised for rigorous academic tradition, a landmark arched entrance, and a serene courtyard.",
     desc_ha:"Cibiyar dakunan karantar Larabci, Karatun Musulunci, Tarihi, da Turanci. Ɗaya daga cikin tsofaffin azuzuwan BUK, sananne don tsananin al'adar ilimi da ƙofofinsa masu kama da baka.",
-    students_en:"Great shortcut to the Main Library — exit through the east door for a 3-minute walk. Timetable boards are at the main archway every Monday.",
-    students_ha:"Hanyar gajere zuwa Babban Dakin Karatu tana ta ƙofar gabas — minti 3 tafiyar ƙafa. Ana ɗora jadawalin darussa a bakin ƙofa kowace Litinin.",
+    students_en:"Great shortcut to the Main Library — exit through the east door for a 3-minute walk. Timetable boards are posted at the main archway every Monday morning.",
+    students_ha:"Hanyar gajere zuwa Babban Dakin Karatu tana ta ƙofar gabas — minti 3 tafiyar ƙafa. Ana ɗora jadawalin darussa a bakin ƙofa kowace Litinin safe.",
     facts:{
       en:[{label:"Founded",value:"1977"},{label:"Departments",value:"6"},{label:"Category",value:"Faculty"},{label:"Zone",value:"North Block"}],
       ha:[{label:"An Kafa",value:"1977"},{label:"Sassan Karatu",value:"6"},{label:"Nau'i",value:"Azuzuwan"},{label:"Yanki",value:"Arewacin Ginin"}]
@@ -644,12 +806,13 @@ const bukLandmarks = [
   {
     id:'convo', category:'Theater', emoji:'🎓', color:'#a8293e',
     heroBg:'linear-gradient(135deg,#7b1d2e,#0d1b3e)',
-    name_en:"Convocation Arena", name_ha:"Filin Bikin Kammala Karatu",
+    name_en:"Convocation Arena",
+    name_ha:"Filin Bikin Kammala Karatu",
     commonName_en:"The Convo", commonName_ha:"Filin Bikin",
-    desc_en:"The grand outdoor arena that serves as the ceremonial heart of BUK. Hosts annual convocation ceremonies, presidential visits, public lectures, and inter-faculty competitions. Seats thousands under the open sky.",
+    desc_en:"The grand outdoor arena that serves as the ceremonial heart of BUK. Hosts annual convocation ceremonies, presidential visits, public lectures, and inter-faculty competitions. Seats thousands of guests under the open sky.",
     desc_ha:"Babban filin waje wanda ke zama zuciyar bikin BUK. Ana yin bikin kammala karatu na shekara-shekara, ziyarori na shugabanci, lacca na jama'a da gasar azuzuwa a nan.",
-    students_en:"Arrive 45 minutes early for convocation — parking fills fast. The east entrance (near the faculty gate) has shorter queues than the main gate.",
-    students_ha:"Zo aƙalla minti 45 kafin bikin kammala karatu — wurin ajiye mota yana cika. Ƙofar gabas tana da ɗan gajeren jerin mutane.",
+    students_en:"Arrive at least 45 minutes early for convocation — parking fills fast. The east entrance (near the faculty gate) has shorter queues than the main gate.",
+    students_ha:"Zo aƙalla minti 45 kafin bikin kammala karatu — wurin ajiye mota yana cika da wuri. Ƙofar gabas (kusa da ƙofar azuzuwa) tana da ɗan gajeren jerin mutane.",
     facts:{
       en:[{label:"Capacity",value:"~5,000"},{label:"Type",value:"Outdoor Arena"},{label:"Category",value:"Theater"},{label:"Zone",value:"Central"}],
       ha:[{label:"Iya Karɓa",value:"~5,000"},{label:"Nau'i",value:"Filin Waje"},{label:"Nau'in",value:"Filin Taro"},{label:"Yanki",value:"Tsakiya"}]
@@ -659,12 +822,13 @@ const bukLandmarks = [
   {
     id:'library', category:'Library', emoji:'📖', color:'#1e88e5',
     heroBg:'linear-gradient(135deg,#1565c0,#162348)',
-    name_en:"Central Library", name_ha:"Babban Dakin Karatu",
+    name_en:"Central Library",
+    name_ha:"Babban Dakin Karatu",
     commonName_en:"The Main Library", commonName_ha:"Babban Laburare",
-    desc_en:"A multi-storey academic library housing thousands of printed volumes, bound journals, research theses, and digital resources. The primary research hub for all BUK students and faculty.",
-    desc_ha:"Laburaren ilimi mai hawa da yawa wanda ke ɗauke da dubban littattafai, jaridu, rubuce-rubuce na bincike, da albarkatu na dijital.",
-    students_en:"Bring your student ID — access requires it. The 2nd floor has the quietest reading area. Printing at ₦10/page. Opens 8 AM daily.",
-    students_ha:"Kawo katin dalibinka — ana buƙatarsa don shiga. Hawa na 2 yana da mafi natsuwa wurin karatu. Ana buga takarda ₦10/shafi. Ana bude karfe 8 na safe.",
+    desc_en:"A multi-storey academic library housing thousands of printed volumes, bound journals, research theses, and digital resources. The primary research hub for all BUK students and faculty. Features dedicated postgraduate reading rooms and computer terminals.",
+    desc_ha:"Laburaren ilimi mai hawa da yawa wanda ke ɗauke da dubban littattafai, jaridu, rubuce-rubuce na bincike, da albarkatu na dijital. Cibiyar bincike ta farko ga dukkan ɗalibai da malamai.",
+    students_en:"Bring your student ID — access requires it. 2nd floor has the quietest reading area. Printing available at ₦10/page. Opens 8 AM daily, closes 9 PM.",
+    students_ha:"Kawo katin dalibinka — ana buƙatarsa don shiga. Hawa na 2 yana da mafi natsuwa wurin karatu. Ana buga takarda ₦10/shafi. Ana bude karfe 8 na safe, ana rufe 9 na dare.",
     facts:{
       en:[{label:"Floors",value:"4"},{label:"Open",value:"8 AM – 9 PM"},{label:"Category",value:"Library"},{label:"Zone",value:"West Block"}],
       ha:[{label:"Hawa",value:"4"},{label:"Buɗewa",value:"8 AM – 9 PM"},{label:"Nau'i",value:"Dakin Karatu"},{label:"Yanki",value:"Yammacin Ginin"}]
@@ -674,12 +838,13 @@ const bukLandmarks = [
   {
     id:'sms', category:'Faculty', emoji:'🏛', color:'#c9973a',
     heroBg:'linear-gradient(135deg,#7a5a1a,#1e3168)',
-    name_en:"Faculty of Social & Management Sciences", name_ha:"Fakaltun Kimiyyar Zamantakewa da Gudanarwa",
+    name_en:"Faculty of Social & Management Sciences",
+    name_ha:"Fakaltun Kimiyyar Zamantakewa da Gudanarwa",
     commonName_en:"SMS Faculty", commonName_ha:"Fakaltun SMS",
     desc_en:"Hosts departments of Economics, Business Administration, Political Science, Sociology, and Mass Communication. Features a modern multi-level lecture complex and a dedicated postgraduate wing.",
-    desc_ha:"Cibiyar dakunan karantar Tattalin Arziki, Gudanar da Kasuwanci, Kimiyyar Siyasa, Ilimin Zamantakewa, da Sadarwa ga Jama'a.",
-    students_en:"The SMS student lounge on the ground floor has strong WiFi, open until 10 PM — ideal for group work. Check the Dean's notice board for scholarship updates.",
-    students_ha:"Zauren ɗalibai na SMS a hawa na farko yana da ƙarfin WiFi, buɗe har 10 na dare. Duba allon sanarwa kusa da ofishin Dean.",
+    desc_ha:"Cibiyar dakunan karantar Tattalin Arziki, Gudanar da Kasuwanci, Kimiyyar Siyasa, Ilimin Zamantakewa, da Sadarwa ga Jama'a. Tana da gine-ginen zamani da ɓangare na digiri na biyu.",
+    students_en:"The SMS student lounge on the ground floor has strong WiFi — open until 10 PM, ideal for group work. Check the Dean's office notice board for scholarship announcements.",
+    students_ha:"Zauren ɗalibai na SMS a hawa na farko yana da ƙarfin WiFi — buɗe har 10 na dare, mai kyau don aikin rukuni. Duba allon sanarwa kusa da ofishin Dean don tallafi.",
     facts:{
       en:[{label:"Founded",value:"1981"},{label:"Departments",value:"5"},{label:"Category",value:"Faculty"},{label:"Zone",value:"East Block"}],
       ha:[{label:"An Kafa",value:"1981"},{label:"Sassan Karatu",value:"5"},{label:"Nau'i",value:"Azuzuwan"},{label:"Yanki",value:"Gabashin Ginin"}]
@@ -689,12 +854,13 @@ const bukLandmarks = [
   {
     id:'vc', category:'Office', emoji:'🏢', color:'#388e3c',
     heroBg:'linear-gradient(135deg,#2e6b31,#162348)',
-    name_en:"Vice Chancellor's Office", name_ha:"Ofishin Mataimakin Shugaban Jami'a",
+    name_en:"Vice Chancellor's Office",
+    name_ha:"Ofishin Mataimakin Shugaban Jami'a",
     commonName_en:"VC's Lodge", commonName_ha:"Ofishin VC",
-    desc_en:"The central administrative nucleus of Bayero University Kano. Houses the Vice-Chancellor, Deputy VCs, Registrar, and key management offices. Surrounded by manicured grounds and a flagpole plaza.",
-    desc_ha:"Cibiyar gudanarwa ta Jami'ar Bayero Kano. Ofishin Mataimakin Shugaban Jami'a, Mataimakai, da manyan ofisoshin gudanarwa suna nan.",
-    students_en:"Administrative queries (transcripts, deferral, bursary) are at the ground floor helpdesk. Best visited 9–11 AM. Smart dress expected.",
-    students_ha:"Ana magance tambayoyin gudanarwa a tebur na taimako. Mafi kyau zuwa tsakanin karfe 9–11 na safe. Ana tsammani sutura mai kyau.",
+    desc_en:"The central administrative nucleus of Bayero University Kano. Houses the Vice-Chancellor, Deputy VCs, Registrar, and key management offices. Surrounded by manicured grounds and a flagpole plaza used for official ceremonies.",
+    desc_ha:"Cibiyar gudanarwa ta Jami'ar Bayero Kano. Ofishin Mataimakin Shugaban Jami'a, Mataimakai, da manyan ofisoshin gudanarwa suna nan. An kewaye shi da filayen da aka yi kyau da filin tuta.",
+    students_en:"Administrative queries (transcripts, deferral, bursary) handled at the ground floor helpdesk. Best visited 9–11 AM to avoid queues. Smart dress is expected in this compound.",
+    students_ha:"Ana magance tambayoyin gudanarwa a tebur na taimako a hawa na farko. Mafi kyau zuwa tsakanin karfe 9–11 na safe don guje wa jerin mutane. Ana tsammani sutura mai kyau a wannan fili.",
     facts:{
       en:[{label:"Type",value:"Administration"},{label:"Hours",value:"8 AM – 4 PM"},{label:"Category",value:"Office"},{label:"Zone",value:"Central"}],
       ha:[{label:"Nau'i",value:"Gudanarwa"},{label:"Sa'o'i",value:"8 AM – 4 PM"},{label:"Nau'in",value:"Ofis"},{label:"Yanki",value:"Tsakiya"}]
@@ -703,94 +869,121 @@ const bukLandmarks = [
   }
 ];
 
-/* ══════════════════════════════════════════════════════
-   FUSE.JS
-══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   FUSE.JS — Fuzzy search (threshold 0.4)
+════════════════════════════════════════════════════════ */
 function buildFuse() {
-  return new Fuse(bukLandmarks.map(l=>({
-    id:l.id, name_en:l.name_en, name_ha:l.name_ha,
-    common_en:l.commonName_en, common_ha:l.commonName_ha, category:l.category
-  })), {
-    threshold:0.4, includeScore:true,
-    keys:[
-      {name:'name_en',weight:0.35},{name:'name_ha',weight:0.35},
-      {name:'common_en',weight:0.15},{name:'common_ha',weight:0.15},
-      {name:'category',weight:0.10}
-    ]
-  });
+  return new Fuse(
+    bukLandmarks.map(l => ({
+      id:l.id, name_en:l.name_en, name_ha:l.name_ha,
+      common_en:l.commonName_en, common_ha:l.commonName_ha,
+      category:l.category
+    })),
+    {
+      threshold: 0.4,
+      includeScore: true,
+      keys: [
+        { name:'name_en',   weight: 0.35 },
+        { name:'name_ha',   weight: 0.35 },
+        { name:'common_en', weight: 0.15 },
+        { name:'common_ha', weight: 0.15 },
+        { name:'category',  weight: 0.10 },
+      ]
+    }
+  );
 }
 let fuse = buildFuse();
 
-/* ══════════════════════════════════════════════════════
-   MAP
-══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   MAP INITIALISATION
+════════════════════════════════════════════════════════ */
 const BUK_CENTER = [11.9808, 8.4755];
 const BUK_ZOOM   = 17;
 
-const map = L.map('map', { center:BUK_CENTER, zoom:BUK_ZOOM, zoomControl:false });
+const map = L.map('map', {
+  center: BUK_CENTER, zoom: BUK_ZOOM, zoomControl: false
+});
 
 const darkTiles = L.tileLayer(
   'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-  {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',subdomains:'abcd',maxZoom:20}
+  { attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>', subdomains:'abcd', maxZoom:20 }
 ).addTo(map);
 
 const lightTiles = L.tileLayer(
   'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-  {attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',subdomains:'abcd',maxZoom:20}
+  { attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>', subdomains:'abcd', maxZoom:20 }
 );
 
-/* ── BUK markers ──────────────────────────────────── */
+/* ── Landmark markers ────────────────────────────────── */
 const markerRefs = {};
-function bukIcon(l, active=false) {
+
+function bukIcon(l, active = false) {
   return L.divIcon({
-    html:`<div class="buk-marker${active?' active':''}" style="background:${l.color}"><span class="mi">${l.emoji}</span></div>`,
-    className:'', iconSize:[36,36], iconAnchor:[18,36]
+    html: `<div class="buk-marker${active?' active':''}" style="background:${l.color}"><span class="mi">${l.emoji}</span></div>`,
+    className: '', iconSize: [36,36], iconAnchor: [18,36]
   });
 }
+
 bukLandmarks.forEach(l => {
-  const m = L.marker([l.coords.lat,l.coords.lng],{icon:bukIcon(l)}).addTo(map);
-  m.on('click',()=>openPanel(l));
-  markerRefs[l.id]={marker:m,landmark:l};
+  const m = L.marker([l.coords.lat, l.coords.lng], { icon: bukIcon(l) }).addTo(map);
+  m.on('click', () => openPanel(l));
+  markerRefs[l.id] = { marker: m, landmark: l };
 });
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    LIVE LOCATION — Blue Dot + Accuracy Circle (Task 2)
-══════════════════════════════════════════════════════ */
-let blueDot      = null;
-let accCircle    = null;
-let watchId      = null;
-let firstFix     = true;
+   ─────────────────────────────────────────────────────
+   • watchPosition keeps the dot moving in real-time
+   • accCircle shows GPS margin of error
+   • Locate button turns blue while tracking is active
+   • Toggle: tap again to stop tracking
+════════════════════════════════════════════════════════ */
+let blueDot   = null;
+let accCircle = null;
+let watchId   = null;
+let firstFix  = true;
 
 function blueDotIcon() {
   return L.divIcon({
-    html:`<div class="blue-dot-wrap"><div class="blue-dot-pulse"></div><div class="blue-dot-core"></div></div>`,
-    className:'', iconSize:[20,20], iconAnchor:[10,10]
+    html: `<div class="blue-dot-wrap">
+             <div class="blue-dot-pulse"></div>
+             <div class="blue-dot-core"></div>
+           </div>`,
+    className: '', iconSize: [20,20], iconAnchor: [10,10]
   });
 }
 
 function onPosition(pos) {
-  const {latitude:lat, longitude:lng, accuracy} = pos.coords;
+  const { latitude: lat, longitude: lng, accuracy } = pos.coords;
 
   /* Place or move the blue dot */
   if (!blueDot) {
-    blueDot = L.marker([lat,lng],{icon:blueDotIcon(), zIndexOffset:1000}).addTo(map);
-  } else {
-    blueDot.setLatLng([lat,lng]);
-  }
-
-  /* Place or resize the GPS accuracy circle */
-  if (!accCircle) {
-    accCircle = L.circle([lat,lng],{
-      radius:accuracy, color:'#1976d2', fillColor:'#1976d2',
-      fillOpacity:0.10, weight:1.5, dashArray:'4 3'
+    blueDot = L.marker([lat, lng], {
+      icon: blueDotIcon(),
+      zIndexOffset: 1000
     }).addTo(map);
   } else {
-    accCircle.setLatLng([lat,lng]);
+    blueDot.setLatLng([lat, lng]);
+  }
+
+  /* Place or resize the accuracy circle */
+  if (!accCircle) {
+    accCircle = L.circle([lat, lng], {
+      radius:      accuracy,
+      color:       '#1976d2',
+      fillColor:   '#1976d2',
+      fillOpacity: 0.09,
+      weight:      1.5,
+      dashArray:   '5 4'
+    }).addTo(map);
+  } else {
+    accCircle.setLatLng([lat, lng]);
     accCircle.setRadius(accuracy);
   }
 
+  /* First fix → fly to user's location */
   if (firstFix) {
-    map.flyTo([lat,lng], 18, {duration:1.1});
+    map.flyTo([lat, lng], 18, { duration: 1.1 });
     showToast(t('locationFound'));
     firstFix = false;
   } else {
@@ -798,202 +991,255 @@ function onPosition(pos) {
   }
 }
 
+/* Bilingual error handler — Task 3 */
 function onPositionError(err) {
-  const keys = {1:'errDenied', 2:'errUnavailable', 3:'errTimeout'};
-  showLocError(t(keys[err.code] || 'errUnavailable'));
+  const msgKey = { 1:'errDenied', 2:'errUnavailable', 3:'errTimeout' }[err.code] || 'errUnavailable';
+  showLocError(t(msgKey));
   stopTracking();
 }
 
 function startTracking() {
-  if (!navigator.geolocation) { showLocError(t('errUnsupported')); return; }
+  if (!navigator.geolocation) {
+    showLocError(t('errUnsupported'));
+    return;
+  }
   firstFix = true;
   showToast(t('locating'));
-  document.getElementById('btn-locate').classList.add('active');
-  watchId = navigator.geolocation.watchPosition(onPosition, onPositionError,
-    {enableHighAccuracy:true, timeout:12000, maximumAge:3000});
+  document.getElementById('btn-locate').classList.add('tracking');
+
+  watchId = navigator.geolocation.watchPosition(
+    onPosition,
+    onPositionError,
+    { enableHighAccuracy: true, timeout: 12000, maximumAge: 3000 }
+  );
 }
 
 function stopTracking() {
-  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId=null; }
-  document.getElementById('btn-locate').classList.remove('active');
+  if (watchId !== null) {
+    navigator.geolocation.clearWatch(watchId);
+    watchId = null;
+  }
+  document.getElementById('btn-locate').classList.remove('tracking');
 }
 
+/* Toggle on button click */
 document.getElementById('btn-locate').addEventListener('click', () => {
-  if (watchId !== null) { stopTracking(); showToast(t('trackingOff')); }
-  else { startTracking(); }
+  if (watchId !== null) {
+    stopTracking();
+    showToast(t('trackingOff'));
+  } else {
+    startTracking();
+    // trackingOn toast fires when first fix arrives
+  }
 });
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    CENTRE MAP BUTTON (Task 3)
-══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 document.getElementById('btn-center').addEventListener('click', () => {
-  map.flyTo(BUK_CENTER, BUK_ZOOM, {duration:0.9});
+  map.flyTo(BUK_CENTER, BUK_ZOOM, { duration: 0.9 });
   showToast(t('centerDone'));
 });
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    LOCATION ERROR BANNER (Task 3)
-══════════════════════════════════════════════════════ */
-let errTimer;
-function showLocError(msg) {
-  const b = document.getElementById('loc-error');
-  document.getElementById('loc-error-msg').textContent = msg;
-  b.classList.add('show');
-  clearTimeout(errTimer);
-  errTimer = setTimeout(() => b.classList.remove('show'), 9000);
-}
-document.getElementById('loc-error-close').addEventListener('click', () =>
-  document.getElementById('loc-error').classList.remove('show')
-);
+════════════════════════════════════════════════════════ */
+let errBannerTimer;
 
-/* ══════════════════════════════════════════════════════
-   PANEL
-══════════════════════════════════════════════════════ */
-const panel = document.getElementById('panel');
-let activeId = null;
+function showLocError(msg) {
+  const banner = document.getElementById('loc-error');
+  document.getElementById('loc-error-msg').textContent = msg;
+  banner.classList.add('show');
+  clearTimeout(errBannerTimer);
+  errBannerTimer = setTimeout(() => banner.classList.remove('show'), 9000);
+}
+
+document.getElementById('loc-error-close').addEventListener('click', () => {
+  document.getElementById('loc-error').classList.remove('show');
+});
+document.getElementById('loc-error-close').addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') document.getElementById('loc-error').classList.remove('show');
+});
+
+/* ════════════════════════════════════════════════════════
+   BUILDING PANEL
+════════════════════════════════════════════════════════ */
+const panel   = document.getElementById('panel');
+let activeId  = null;
 
 function populatePanel(l) {
   const lang = currentLang;
-  document.getElementById('panel-name').textContent     = lang==='en'?l.name_en:l.name_ha;
-  document.getElementById('panel-common').textContent   = lang==='en'?l.commonName_en:l.commonName_ha;
-  document.getElementById('panel-desc').textContent     = lang==='en'?l.desc_en:l.desc_ha;
-  document.getElementById('panel-students').textContent = lang==='en'?l.students_en:l.students_ha;
+  document.getElementById('panel-name').textContent     = lang==='en' ? l.name_en     : l.name_ha;
+  document.getElementById('panel-common').textContent   = lang==='en' ? l.commonName_en : l.commonName_ha;
+  document.getElementById('panel-desc').textContent     = lang==='en' ? l.desc_en     : l.desc_ha;
+  document.getElementById('panel-students').textContent = lang==='en' ? l.students_en : l.students_ha;
 
   const badge = document.getElementById('panel-badge');
-  badge.textContent = `${l.emoji}  ${t('cat'+l.category)}`;
-  badge.style.cssText = `background:${l.color}28;color:#fff;border:1px solid ${l.color}70;`;
+  badge.textContent      = `${l.emoji}  ${t('cat' + l.category)}`;
+  badge.style.cssText    = `background:${l.color}28;color:#fff;border:1px solid ${l.color}70;`;
   document.getElementById('panel-hero-bg').style.background = l.heroBg;
 
   const facts = l.facts[lang] || l.facts.en;
-  document.getElementById('panel-facts').innerHTML = facts.map(f=>
-    `<div class="fact-chip"><div class="fact-chip-label">${f.label}</div><div class="fact-chip-value">${f.value}</div></div>`
+  document.getElementById('panel-facts').innerHTML = facts.map(f =>
+    `<div class="fact-chip">
+       <div class="fact-chip-label">${f.label}</div>
+       <div class="fact-chip-value">${f.value}</div>
+     </div>`
   ).join('');
 }
 
 function openPanel(l) {
   activeId = l.id;
-  Object.values(markerRefs).forEach(({marker,landmark:lm})=>marker.setIcon(bukIcon(lm,false)));
-  markerRefs[l.id].marker.setIcon(bukIcon(l,true));
+  Object.values(markerRefs).forEach(({ marker, landmark: lm }) => marker.setIcon(bukIcon(lm, false)));
+  markerRefs[l.id].marker.setIcon(bukIcon(l, true));
   populatePanel(l);
   setTab('info');
   panel.classList.add('open');
-  map.flyTo([l.coords.lat,l.coords.lng],18,{duration:0.75});
+  map.flyTo([l.coords.lat, l.coords.lng], 18, { duration: 0.75 });
 }
 
 function updatePanelText() {
   if (!activeId) return;
-  const l = bukLandmarks.find(x=>x.id===activeId);
+  const l = bukLandmarks.find(x => x.id === activeId);
   if (l) populatePanel(l);
 }
 
 function closePanel() {
   panel.classList.remove('open');
-  if (activeId) { markerRefs[activeId].marker.setIcon(bukIcon(markerRefs[activeId].landmark,false)); activeId=null; }
+  if (activeId) {
+    markerRefs[activeId].marker.setIcon(bukIcon(markerRefs[activeId].landmark, false));
+    activeId = null;
+  }
 }
 
 document.getElementById('panel-close').addEventListener('click', closePanel);
 map.on('click', closePanel);
 
+/* Tabs */
 function setTab(name) {
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+name));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + name));
 }
-document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>setTab(btn.dataset.tab)));
+document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => setTab(btn.dataset.tab)));
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    SEARCH
-══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 const searchInput = document.getElementById('search-input');
 const searchBox   = document.getElementById('search-results');
 
 searchInput.addEventListener('input', () => {
   const q = searchInput.value.trim();
-  searchBox.innerHTML='';
+  searchBox.innerHTML = '';
+
   if (!q) { searchBox.classList.remove('open'); return; }
-  const results = fuse.search(q).slice(0,6);
+
+  const results = fuse.search(q).slice(0, 6);
+
   if (!results.length) {
-    searchBox.innerHTML=`<div class="sr-empty">${t('noResults')}</div>`;
-    searchBox.classList.add('open'); return;
+    searchBox.innerHTML = `<div class="sr-empty">${t('noResults')}</div>`;
+    searchBox.classList.add('open');
+    return;
   }
-  results.forEach(({item,score})=>{
-    const l = bukLandmarks.find(x=>x.id===item.id); if (!l) return;
-    const name   = currentLang==='en'?l.name_en:l.name_ha;
-    const common = currentLang==='en'?l.commonName_en:l.commonName_ha;
-    const pct    = Math.round((1-score)*100);
-    const div    = document.createElement('div');
-    div.className='sr-item';
-    div.innerHTML=`
-      <div class="sr-icon" style="background:${l.color}22;font-size:18px">${l.emoji}</div>
+
+  results.forEach(({ item, score }) => {
+    const l = bukLandmarks.find(x => x.id === item.id);
+    if (!l) return;
+    const name   = currentLang === 'en' ? l.name_en     : l.name_ha;
+    const common = currentLang === 'en' ? l.commonName_en : l.commonName_ha;
+    const pct    = Math.round((1 - score) * 100);
+
+    const div = document.createElement('div');
+    div.className = 'sr-item';
+    div.innerHTML = `
+      <div class="sr-icon" style="background:${l.color}1e;font-size:18px">${l.emoji}</div>
       <div style="flex:1;min-width:0">
         <div class="sr-name">${name}</div>
-        <div class="sr-meta">${t('cat'+l.category)} · ${common}</div>
+        <div class="sr-meta">${t('cat' + l.category)} · ${common}</div>
       </div>
       <div class="sr-score">${pct}%</div>`;
-    div.addEventListener('click',()=>{ searchInput.value=name; searchBox.classList.remove('open'); openPanel(l); });
+    div.addEventListener('click', () => {
+      searchInput.value = name;
+      searchBox.classList.remove('open');
+      openPanel(l);
+    });
     searchBox.appendChild(div);
   });
+
   searchBox.classList.add('open');
 });
 
-document.addEventListener('click', e=>{
-  if (!searchInput.contains(e.target)&&!searchBox.contains(e.target)) searchBox.classList.remove('open');
+/* Close on outside click */
+document.addEventListener('click', e => {
+  if (!searchInput.contains(e.target) && !searchBox.contains(e.target)) {
+    searchBox.classList.remove('open');
+  }
 });
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    LANGUAGE TOGGLE
-══════════════════════════════════════════════════════ */
-document.getElementById('lang-btn').addEventListener('click', ()=>{
-  currentLang = currentLang==='en'?'ha':'en';
-  applyTranslations(); updatePanelText(); fuse=buildFuse();
-  searchInput.value=''; searchBox.classList.remove('open');
+════════════════════════════════════════════════════════ */
+document.getElementById('lang-btn').addEventListener('click', () => {
+  currentLang = currentLang === 'en' ? 'ha' : 'en';
+  applyTranslations();
+  updatePanelText();
+  fuse = buildFuse();
+  searchInput.value = '';
+  searchBox.classList.remove('open');
 });
 
-/* ══════════════════════════════════════════════════════
-   THEME TOGGLE  (Task 1 + Task 4)
-══════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   THEME TOGGLE (Task 1 + Task 4)
+   Dark:  charcoal #121212 bg, soft-white #e0e0e0 text
+   Light: --ctrl-icon → #0d1b3e (dark icons visible on white)
+════════════════════════════════════════════════════════ */
 let isLight = false;
 const themeIcon = document.getElementById('theme-icon');
 const SUN  = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
 const MOON = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
 
-document.getElementById('theme-btn').addEventListener('click', ()=>{
-  isLight=!isLight;
-  document.body.classList.toggle('light',isLight);
-  if (isLight) { map.removeLayer(darkTiles); lightTiles.addTo(map); themeIcon.innerHTML=SUN; }
-  else         { map.removeLayer(lightTiles); darkTiles.addTo(map); themeIcon.innerHTML=MOON; }
+document.getElementById('theme-btn').addEventListener('click', () => {
+  isLight = !isLight;
+  document.body.classList.toggle('light', isLight);
+  if (isLight) { map.removeLayer(darkTiles);  lightTiles.addTo(map); themeIcon.innerHTML = SUN; }
+  else         { map.removeLayer(lightTiles); darkTiles.addTo(map);  themeIcon.innerHTML = MOON; }
 });
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    ZOOM
-══════════════════════════════════════════════════════ */
-document.getElementById('btn-zi').addEventListener('click',()=>map.zoomIn());
-document.getElementById('btn-zo').addEventListener('click',()=>map.zoomOut());
+════════════════════════════════════════════════════════ */
+document.getElementById('btn-zi').addEventListener('click', () => map.zoomIn());
+document.getElementById('btn-zo').addEventListener('click', () => map.zoomOut());
 
-/* ══════════════════════════════════════════════════════
-   ACTION BUTTONS
-══════════════════════════════════════════════════════ */
-['btn-navigate','btn-navigate2','btn-navigate3'].forEach(id=>
-  document.getElementById(id)?.addEventListener('click',()=>showToast(t('navSoon')))
+/* ════════════════════════════════════════════════════════
+   ACTION BUTTONS (placeholders until routing in v4)
+════════════════════════════════════════════════════════ */
+['btn-navigate','btn-navigate2','btn-navigate3'].forEach(id =>
+  document.getElementById(id)?.addEventListener('click', () => showToast(t('navSoon')))
 );
-['btn-share','btn-share2'].forEach(id=>
-  document.getElementById(id)?.addEventListener('click',()=>{ navigator.clipboard?.writeText(location.href); showToast(t('shareDone')); })
+['btn-share','btn-share2'].forEach(id =>
+  document.getElementById(id)?.addEventListener('click', () => {
+    navigator.clipboard?.writeText(location.href).catch(() => {});
+    showToast(t('shareDone'));
+  })
 );
-document.getElementById('btn-save')?.addEventListener('click',()=>showToast(t('saveDone')));
+document.getElementById('btn-save')?.addEventListener('click', () => showToast(t('saveDone')));
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    TOAST
-══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 let toastTimer;
 function showToast(msg) {
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
   clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>el.classList.remove('show'),2800);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
-/* ══════════════════════════════════════════════════════
+/* ════════════════════════════════════════════════════════
    INIT
-══════════════════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
 applyTranslations();
 </script>
 </body>
