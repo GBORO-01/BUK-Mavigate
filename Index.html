@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BUK Navigate — Old Site</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────── */
+    :root {
+      --navy:        #0d1b3e;
+      --navy-mid:    #162348;
+      --navy-light:  #1e3168;
+      --maroon:      #7b1d2e;
+      --maroon-bright:#a8293e;
+      --gold:        #c9973a;
+      --white:       #f8f9fc;
+      --off-white:   #eef0f6;
+      --text-muted:  #8b93ab;
+      --glass:       rgba(13,27,62,0.78);
+      --radius:      14px;
+      --shadow-lg:   0 20px 60px rgba(0,0,0,0.35);
+      --shadow-sm:   0 4px 16px rgba(0,0,0,0.2);
+      --transition:  0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* ─── RESET ──────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; font-family: 'DM Sans', sans-serif; background: var(--navy); }
+
+    /* ─── MAP ────────────────────────────────────────────── */
+    #map {
+      position: absolute; inset: 0;
+      z-index: 0;
+      filter: saturate(0.8) brightness(0.9);
+    }
+
+    /* ─── HEADER BAR ─────────────────────────────────────── */
+    #header {
+      position: absolute; top: 0; left: 0; right: 0;
+      z-index: 900;
+      padding: 16px 16px 0;
+      pointer-events: none;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: all;
+    }
+
+    /* Logo pill */
+    .logo-pill {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--maroon);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 50px;
+      flex-shrink: 0;
+      box-shadow: var(--shadow-sm);
+    }
+    .logo-pill .logo-icon {
+      width: 24px; height: 24px;
+      display: grid; place-items: center;
+    }
+    .logo-pill .logo-icon svg { width: 20px; height: 20px; fill: #fff; }
+    .logo-pill .logo-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px; font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1;
+    }
+    .logo-pill .logo-sub {
+      font-size: 9px; font-weight: 300; color: rgba(255,255,255,0.7);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+
+    /* Search bar */
+    .search-wrap {
+      flex: 1;
+      position: relative;
+    }
+    .search-wrap input {
+      width: 100%;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 12px 44px 12px 18px;
+      border-radius: 50px;
+      outline: none;
+      box-shadow: var(--shadow-sm);
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .search-wrap input::placeholder { color: rgba(255,255,255,0.45); }
+    .search-wrap input:focus {
+      border-color: rgba(201,151,58,0.6);
+      background: rgba(13,27,62,0.92);
+    }
+    .search-wrap .search-icon {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none;
+    }
+    .search-wrap .search-icon svg { width: 18px; height: 18px; stroke: currentColor; fill: none; }
+
+    /* Dropdown results */
+    #search-results {
+      position: absolute; top: calc(100% + 8px); left: 0; right: 0;
+      background: var(--navy-mid);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      display: none;
+      z-index: 999;
+    }
+    #search-results.open { display: block; }
+    .search-result-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .search-result-item:hover { background: rgba(255,255,255,0.07); }
+    .search-result-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .sri-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: grid; place-items: center; flex-shrink: 0;
+      font-size: 16px;
+    }
+    .sri-info { flex: 1; min-width: 0; }
+    .sri-name { font-size: 13px; font-weight: 600; color: #fff; }
+    .sri-cat { font-size: 11px; color: var(--text-muted); }
+
+    /* ─── FLOATING CONTROLS ───────────────────────────────── */
+    #controls {
+      position: absolute; right: 16px; bottom: 220px;
+      z-index: 900;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .ctrl-btn {
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      border: none; cursor: pointer;
+      display: grid; place-items: center;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .ctrl-btn:active { transform: scale(0.93); }
+    .ctrl-btn svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    #btn-locate {
+      background: var(--gold);
+      color: var(--navy);
+    }
+    #btn-locate:hover { box-shadow: 0 6px 24px rgba(201,151,58,0.55); }
+
+    #btn-zoom-in, #btn-zoom-out {
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    #btn-zoom-in:hover, #btn-zoom-out:hover { background: rgba(30,49,104,0.9); }
+
+    /* Category legend */
+    #legend {
+      position: absolute; left: 16px; bottom: 220px;
+      z-index: 900;
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .legend-title { font-size: 10px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+    .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: rgba(255,255,255,0.8); margin-bottom: 5px; }
+    .legend-item:last-child { margin-bottom: 0; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ─── BOTTOM SHEET ────────────────────────────────────── */
+    #bottom-sheet {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      z-index: 950;
+      transform: translateY(100%);
+      transition: transform var(--transition);
+    }
+    #bottom-sheet.open { transform: translateY(0); }
+
+    .bs-inner {
+      background: var(--navy-mid);
+      border-radius: 22px 22px 0 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 -12px 50px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .bs-handle-wrap {
+      display: flex; justify-content: center; padding: 12px 0 6px;
+      cursor: grab;
+    }
+    .bs-handle {
+      width: 40px; height: 4px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+    }
+
+    .bs-hero {
+      height: 90px;
+      position: relative;
+      overflow: hidden;
+    }
+    .bs-hero-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, var(--maroon) 0%, var(--navy-light) 100%);
+      opacity: 0.9;
+    }
+    .bs-hero-pattern {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+    .bs-hero-content {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-end;
+      padding: 14px 20px;
+      gap: 12px;
+    }
+    .bs-category-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .bs-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; font-weight: 700;
+      color: #fff; line-height: 1.1;
+    }
+    .bs-common-name {
+      font-size: 12px; color: rgba(255,255,255,0.6);
+      margin-top: 3px;
+    }
+
+    .bs-body { padding: 18px 20px 24px; }
+
+    .bs-desc {
+      font-size: 13.5px; color: rgba(255,255,255,0.75);
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    .bs-actions {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .bs-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 13px 10px;
+      border-radius: 12px;
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .bs-btn:active { transform: scale(0.97); opacity: 0.85; }
+    .bs-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+    .bs-btn-primary { background: var(--maroon-bright); color: #fff; }
+    .bs-btn-secondary { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.85); border: 1px solid rgba(255,255,255,0.12); }
+
+    /* close button */
+    .bs-close {
+      position: absolute; top: 14px; right: 16px;
+      width: 32px; height: 32px;
+      border-radius: 50%; border: none;
+      background: rgba(0,0,0,0.25);
+      color: #fff; cursor: pointer;
+      display: grid; place-items: center;
+      z-index: 10;
+    }
+    .bs-close svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; }
+
+    /* ─── CUSTOM MARKERS ──────────────────────────────────── */
+    .buk-marker {
+      width: 36px; height: 36px;
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      display: grid; place-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      border: 2px solid rgba(255,255,255,0.9);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .buk-marker .marker-inner {
+      transform: rotate(45deg);
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    /* ─── TOAST ───────────────────────────────────────────── */
+    #toast {
+      position: absolute; bottom: 190px; left: 50%; transform: translateX(-50%) translateY(20px);
+      z-index: 960;
+      background: var(--navy-light);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 13px; font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: var(--shadow-sm);
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────── */
+    @media (min-width: 640px) {
+      #bottom-sheet { max-width: 420px; left: 16px; right: auto; }
+      #bottom-sheet.open { transform: translateY(0); }
+      .bs-inner { border-radius: 22px; }
+    }
+
+    /* Leaflet attribution style fix */
+    .leaflet-control-attribution { background: rgba(13,27,62,0.7) !important; color: rgba(255,255,255,0.5) !important; font-size: 10px !important; }
+    .leaflet-control-attribution a { color: rgba(255,255,255,0.5) !important; }
+    .leaflet-control-zoom { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- Map -->
+<div id="map"></div>
+
+<!-- Header -->
+<div id="header">
+  <div class="header-inner">
+    <div class="logo-pill">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      </div>
+      <div>
+        <div class="logo-text">BUK Nav</div>
+        <div class="logo-sub">Old Site</div>
+      </div>
+    </div>
+    <div class="search-wrap">
+      <input type="text" id="search-input" placeholder="Search buildings, faculties…" autocomplete="off" />
+      <div class="search-icon">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div id="search-results"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Legend -->
+<div id="legend">
+  <div class="legend-title">Categories</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#c9973a"></div>Faculty</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#a8293e"></div>Theater / Arena</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#1e88e5"></div>Library</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#388e3c"></div>Admin / Office</div>
+</div>
+
+<!-- Controls -->
+<div id="controls">
+  <button class="ctrl-btn" id="btn-zoom-in" title="Zoom In">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+  <button class="ctrl-btn" id="btn-zoom-out" title="Zoom Out">
+    <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+  <button class="ctrl-btn" id="btn-locate" title="Locate Me">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3"/><circle cx="12" cy="12" r="8" stroke-dasharray="4 2"/></svg>
+  </button>
+</div>
+
+<!-- Bottom Sheet -->
+<div id="bottom-sheet">
+  <div class="bs-inner">
+    <div class="bs-handle-wrap"><div class="bs-handle"></div></div>
+    <div class="bs-hero" style="position:relative;">
+      <div class="bs-hero-bg" id="bs-hero-bg"></div>
+      <div class="bs-hero-pattern"></div>
+      <div class="bs-hero-content">
+        <div style="flex:1;min-width:0;">
+          <div class="bs-category-badge" id="bs-badge"></div>
+          <div class="bs-name" id="bs-name"></div>
+          <div class="bs-common-name" id="bs-common"></div>
+        </div>
+      </div>
+      <button class="bs-close" id="bs-close">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="bs-body">
+      <div class="bs-desc" id="bs-desc"></div>
+      <div class="bs-actions">
+        <button class="bs-btn bs-btn-primary" id="bs-navigate">
+          <svg viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+          Navigate
+        </button>
+        <button class="bs-btn bs-btn-secondary" id="bs-share">
+          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Leaflet JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   DATA — Mock Coordinate System
+   Add more landmarks here; the rest is automatic.
+═══════════════════════════════════════════════════════════ */
+const bukLandmarks = [
+  {
+    name: "Faculty of Arts & Islamic Studies",
+    commonName: "FAIS Building",
+    category: "Faculty",
+    description: "Home to departments of Arabic, Islamic Studies, History, and English. One of BUK's oldest faculties, known for rigorous academic traditions and its landmark arched entrance.",
+    coords: { lat: 11.9815, lng: 8.4740 },
+    emoji: "📚",
+    color: "#c9973a"
+  },
+  {
+    name: "Convocation Arena",
+    commonName: "The Convo",
+    category: "Theater",
+    description: "The grand outdoor arena that serves as the heartbeat of BUK events — from annual convocation ceremonies and public lectures to cultural festivals and inter-faculty competitions.",
+    coords: { lat: 11.9800, lng: 8.4760 },
+    emoji: "🎓",
+    color: "#a8293e"
+  },
+  {
+    name: "Old Campus Central Library",
+    commonName: "The Main Library",
+    category: "Library",
+    description: "A multi-storey academic library housing thousands of texts, journals, and digital resources. The primary research hub for students and faculty across all disciplines.",
+    coords: { lat: 11.9795, lng: 8.4730 },
+    emoji: "📖",
+    color: "#1e88e5"
+  },
+  {
+    name: "Faculty of Social & Management Sciences",
+    commonName: "SMS Faculty",
+    category: "Faculty",
+    description: "Hosts departments of Economics, Business Administration, Political Science, and Sociology. Features a modern lecture complex and a dedicated postgraduate wing.",
+    coords: { lat: 11.9820, lng: 8.4780 },
+    emoji: "🏛",
+    color: "#c9973a"
+  },
+  {
+    name: "Vice Chancellor's Office",
+    commonName: "VC's Lodge",
+    category: "Office",
+    description: "The central administrative nucleus of Bayero University Kano. Houses the VC, Deputy VCs, and key management offices. Surrounded by well-maintained grounds and a flagpole plaza.",
+    coords: { lat: 11.9808, lng: 8.4748 },
+    emoji: "🏢",
+    color: "#388e3c"
+  }
+];
+
+/* ═══════════════════════════════════════════════════════════
+   MAP INITIALISATION
+═══════════════════════════════════════════════════════════ */
+const map = L.map('map', {
+  center: [11.9808, 8.4755],
+  zoom: 17,
+  zoomControl: false,
+  attributionControl: true
+});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+  subdomains: 'abcd',
+  maxZoom: 20
+}).addTo(map);
+
+/* ═══════════════════════════════════════════════════════════
+   MARKER FACTORY
+═══════════════════════════════════════════════════════════ */
+function createMarkerIcon(landmark) {
+  const html = `
+    <div class="buk-marker" style="background:${landmark.color};">
+      <span class="marker-inner">${landmark.emoji}</span>
+    </div>`;
+  return L.divIcon({
+    html,
+    className: '',
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -38]
+  });
+}
+
+const markerMap = {}; // name → L.marker (for search fly-to)
+
+bukLandmarks.forEach(landmark => {
+  const marker = L.marker([landmark.coords.lat, landmark.coords.lng], {
+    icon: createMarkerIcon(landmark)
+  }).addTo(map);
+
+  marker.on('click', () => openBottomSheet(landmark, marker));
+  markerMap[landmark.name] = { marker, landmark };
+});
+
+/* ═══════════════════════════════════════════════════════════
+   BOTTOM SHEET
+═══════════════════════════════════════════════════════════ */
+const sheet     = document.getElementById('bottom-sheet');
+const bsName    = document.getElementById('bs-name');
+const bsCommon  = document.getElementById('bs-common');
+const bsBadge   = document.getElementById('bs-badge');
+const bsDesc    = document.getElementById('bs-desc');
+const bsHeroBg  = document.getElementById('bs-hero-bg');
+const bsClose   = document.getElementById('bs-close');
+
+const categoryMeta = {
+  Faculty:  { color: '#c9973a', text: '#fff', bg: 'linear-gradient(135deg,#7a5a1a,#1e3168)' },
+  Theater:  { color: '#a8293e', text: '#fff', bg: 'linear-gradient(135deg,#7b1d2e,#0d1b3e)' },
+  Library:  { color: '#1e88e5', text: '#fff', bg: 'linear-gradient(135deg,#1565c0,#162348)' },
+  Office:   { color: '#388e3c', text: '#fff', bg: 'linear-gradient(135deg,#2e6b31,#162348)' },
+};
+
+function openBottomSheet(landmark, marker) {
+  const meta = categoryMeta[landmark.category] || categoryMeta.Office;
+
+  bsName.textContent    = landmark.name;
+  bsCommon.textContent  = landmark.commonName;
+  bsDesc.textContent    = landmark.description;
+
+  bsBadge.textContent    = `${landmark.emoji}  ${landmark.category}`;
+  bsBadge.style.background = meta.color + '33';
+  bsBadge.style.color      = '#fff';
+  bsBadge.style.border     = `1px solid ${meta.color}88`;
+
+  bsHeroBg.style.background = meta.bg;
+
+  sheet.classList.add('open');
+  map.flyTo([landmark.coords.lat, landmark.coords.lng], 18, { duration: 0.8 });
+}
+
+function closeBottomSheet() {
+  sheet.classList.remove('open');
+}
+
+bsClose.addEventListener('click', closeBottomSheet);
+map.on('click', closeBottomSheet);
+
+/* ═══════════════════════════════════════════════════════════
+   NAVIGATE & SHARE BUTTONS (placeholders)
+═══════════════════════════════════════════════════════════ */
+document.getElementById('bs-navigate').addEventListener('click', () => {
+  showToast('Navigation coming soon — GPS integration in v2!');
+});
+document.getElementById('bs-share').addEventListener('click', () => {
+  showToast('Share link copied to clipboard!');
+});
+
+/* ═══════════════════════════════════════════════════════════
+   LOCATE ME (placeholder with permission request)
+═══════════════════════════════════════════════════════════ */
+document.getElementById('btn-locate').addEventListener('click', () => {
+  if (!navigator.geolocation) {
+    showToast('Geolocation not supported on this device.');
+    return;
+  }
+  showToast('Locating you…');
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      const { latitude, longitude } = pos.coords;
+      const userIcon = L.divIcon({
+        html: `<div style="width:16px;height:16px;border-radius:50%;background:#c9973a;border:3px solid #fff;box-shadow:0 0 0 6px rgba(201,151,58,0.3)"></div>`,
+        className: '', iconSize: [16,16], iconAnchor: [8,8]
+      });
+      L.marker([latitude, longitude], { icon: userIcon }).addTo(map)
+        .bindPopup('You are here').openPopup();
+      map.flyTo([latitude, longitude], 17, { duration: 1 });
+      showToast('Location found!');
+    },
+    () => { showToast('Could not access your location.'); }
+  );
+});
+
+/* ═══════════════════════════════════════════════════════════
+   ZOOM CONTROLS
+═══════════════════════════════════════════════════════════ */
+document.getElementById('btn-zoom-in').addEventListener('click',  () => map.zoomIn());
+document.getElementById('btn-zoom-out').addEventListener('click', () => map.zoomOut());
+
+/* ═══════════════════════════════════════════════════════════
+   SEARCH
+═══════════════════════════════════════════════════════════ */
+const searchInput   = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  searchResults.innerHTML = '';
+  if (!q) { searchResults.classList.remove('open'); return; }
+
+  const matches = bukLandmarks.filter(l =>
+    l.name.toLowerCase().includes(q) ||
+    l.commonName.toLowerCase().includes(q) ||
+    l.category.toLowerCase().includes(q)
+  );
+
+  if (!matches.length) { searchResults.classList.remove('open'); return; }
+
+  matches.forEach(l => {
+    const item = document.createElement('div');
+    item.className = 'search-result-item';
+    const meta = categoryMeta[l.category] || categoryMeta.Office;
+    item.innerHTML = `
+      <div class="sri-icon" style="background:${meta.color}22;color:${meta.color};font-size:18px;">${l.emoji}</div>
+      <div class="sri-info">
+        <div class="sri-name">${l.name}</div>
+        <div class="sri-cat">${l.category} · ${l.commonName}</div>
+      </div>`;
+    item.addEventListener('click', () => {
+      searchInput.value = l.name;
+      searchResults.classList.remove('open');
+      const { marker, landmark } = markerMap[l.name];
+      openBottomSheet(landmark, marker);
+    });
+    searchResults.appendChild(item);
+  });
+
+  searchResults.classList.add('open');
+});
+
+// Close results on outside click
+document.addEventListener('click', e => {
+  if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+    searchResults.classList.remove('open');
+  }
+});
+
+/* ═══════════════════════════════════════════════════════════
+   TOAST UTILITY
+═══════════════════════════════════════════════════════════ */
+let toastTimer;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+</script>
+</body>
+</html>
