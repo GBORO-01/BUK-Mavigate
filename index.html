@@ -136,6 +136,10 @@
       --legend-poly-active: rgba(201,151,58,0.20);
       --scroll-thumb:  rgba(13,27,62,0.14);
       --map-filter:    saturate(1) brightness(1);
+      /* BUG 5 FIX: admin badge needs contrast-safe values in light mode */
+      --admin-bg:      rgba(120,80,0,0.12);
+      --admin-border:  rgba(150,100,0,0.50);
+      --admin-text:    #7a5000;
     }
 
     /* ══════════════════════════════════════════════
@@ -386,7 +390,9 @@
     }
     .legend-title { font-size: 9px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 9px; }
     .legend-row   { display: flex; align-items: center; gap: 9px; font-size: 11.5px; color: var(--legend-text); margin-bottom: 7px; }
-    .legend-row:last-child { margin-bottom: 0; }
+    /* BUG 4 FIX: .lg-zoom-hint is the actual last child, not a .legend-row,
+       so :last-child never matched. Explicitly zero out the final row's margin. */
+    .legend-row:last-of-type { margin-bottom: 0; }
     /* Idle polygon swatch */
     .lg-poly {
       width: 16px; height: 11px; flex-shrink: 0; border-radius: 3px;
@@ -688,6 +694,7 @@ const translations = {
     dismiss:'Dismiss', noResults:'No buildings found. Try a different spelling.',
     coordCopied:'📋 Copied:',
     adminBadge:'Admin Mode — Click map to copy coords',
+    catFaculty:'Faculty', catTheater:'Theater', catLibrary:'Library', catOffice:'Office',
     errDenied:'Location access denied. Enable permissions in browser settings.',
     errUnavailable:'Location unavailable. Make sure GPS is enabled.',
     errTimeout:'Location timed out. Please try again.',
@@ -711,6 +718,7 @@ const translations = {
     dismiss:'Rufe', noResults:'Ba a sami gini ba. Gwada rubutu daban.',
     coordCopied:'📋 An kwafi:',
     adminBadge:'Yanayin Admin — Latsa taswira don kwafi maki',
+    catFaculty:'Azuzuwan', catTheater:'Filin Taro', catLibrary:'Dakin Karatu', catOffice:'Ofis',
     errDenied:'An hana damar wuri. Yarda da dama a saitunan browser.',
     errUnavailable:'Ba a sami wurinka ba. Tabbatar GPS yana aiki.',
     errTimeout:'Buƙatar wuri ta ɗauki lokaci. Sake gwadawa.',
@@ -1115,13 +1123,15 @@ function populatePanel(lm) {
 }
 
 function updatePanelText() {
-  if (!activeId) return;
-  const lm = bukLandmarks.find(x=>x.id===activeId);
-  if (lm) populatePanel(lm);
-  /* Refresh tooltip text for all polys */
+  /* Always refresh polygon hover tooltips — must run whether or not a panel is open.
+     If this stayed inside the activeId guard, switching language with no open panel
+     would leave all tooltips stuck in the old language. */
   polyLayers.forEach(({poly,landmark:l})=>{
     poly.setTooltipContent(currentLang==='en'?l.commonName_en:l.commonName_ha);
   });
+  if (!activeId) return;
+  const lm = bukLandmarks.find(x=>x.id===activeId);
+  if (lm) populatePanel(lm);
 }
 
 /* closePanel — Task 4: map returns to 100% clean state */
@@ -1172,7 +1182,7 @@ searchInput.addEventListener('input', () => {
     const pct    = Math.round((1-score)*100);
     const div = document.createElement('div');
     div.className = 'sr-item';
-    div.innerHTML = `<div class="sr-icon" style="background:${lm.color}1e;font-size:18px">${lm.emoji}</div><div style="flex:1;min-width:0"><div class="sr-name">${name}</div><div class="sr-meta">${lm.category} · ${common}</div></div><div class="sr-score">${pct}%</div>`;
+    div.innerHTML = `<div class="sr-icon" style="background:${lm.color}1e;font-size:18px">${lm.emoji}</div><div style="flex:1;min-width:0"><div class="sr-name">${name}</div><div class="sr-meta">${t('cat'+lm.category)||lm.category} · ${common}</div></div><div class="sr-score">${pct}%</div>`;
     div.addEventListener('click', () => {
       searchInput.value = name;
       searchBox.classList.remove('open');
@@ -1192,6 +1202,7 @@ document.addEventListener('click', e => {
 ═════════════════════════════════════════════════ */
 document.getElementById('lang-btn').addEventListener('click', () => {
   currentLang = currentLang==='en'?'ha':'en';
+  document.documentElement.lang = currentLang;   /* BUG 3 FIX: keep html[lang] in sync */
   applyTranslations();
   updatePanelText();
   fuse = buildFuse();
